@@ -1,0 +1,5 @@
+file {
+  path => "{{path}}"
+  type => "{{type}}"
+  start_position => end
+}

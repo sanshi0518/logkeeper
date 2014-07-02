@@ -1,0 +1,35 @@
+input {
+    {{input-files|safe}}
+}
+
+filter {
+  if [type] == "access" {
+    grok {
+      match => { "message" => "%{NGINX_ACCESS_LOG}" }
+      add_field => { "module" => "{{module}}" }
+    }
+
+    date {
+      locale => "en"
+      match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+    }
+  } else {
+    grok {
+      match => { "message" => "%{NGINX_ERROR_LOG}" }
+      match => { "message" => "%{NGINX_ERROR_COMMON_LOG}" }
+      add_field => { "module" => "{{module}}" }
+    }
+    
+    date {
+      match => [ "timestamp" , "yyyy/MM/dd HH:mm:ss" ]
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    host => "{{es}}"
+    protocol => "http"
+    index => "nginx-%{module}-%{type}"
+  }
+}

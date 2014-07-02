@@ -1,0 +1,85 @@
+<script type="text/javascript">
+  $(function () {
+    $("#mainTable").editableTableWidget();
+
+    $("#addLinesBtn").bind("click", function () {
+      var inputLines = $("#inputLines").val();
+
+
+      if (inputLines == null || inputLines == "") {
+        show_tips("请先输入日志信息");
+        return;
+      }
+
+      var lineArr = inputLines.split("\n");
+      for (var i = 0; i < lineArr.length; i++) {
+        if (lineArr[i] != "") {
+          $("#mainTable").append("<tr class='delete'><td class='hide' tabindex='1'>0</td><td tabindex='1'>"
+              + lineArr[i] + "</td><td class='hide' tabindex='1'></td></tr>")
+        }
+      }
+      $("#inputLines").val("")
+    })
+
+    $("#take-effect-btn").bind("click", function () {
+      show_processbar();
+    })
+
+    $("#delete-btn").bind("click", function () {
+      show_processbar();
+    })
+
+  });
+</script>
+
+<div class="input-group">
+  <textarea id="inputLines" class="form-control" placeholder="请输入配置日志信息，点击右侧按钮添加" style="height: 8px;"/>
+
+  <div class="input-group-btn">
+    <a id="addLinesBtn" class="btnx btn btn-small btn-inverse" href="javascript:void(0)" style="line-height: 15px;">
+      <i class="icon-plus-sign"></i>
+    </a>
+  </div>
+</div>
+
+<div class="hero-unit">
+  <h3>{{name}}</h3>
+  <br>
+
+  <div id="errorMsg" class="alert alert-error hide">
+    Line Number is Uneditable！
+  </div>
+  <table id="mainTable" class="table">
+    <tbody>
+    {% for line in lines %}
+    {% if line|trim %}
+    <tr class="delete">
+      <td class="hide">{{forloop.counter}}</td>
+      <td>{{line|nbsp|safe}}</td>
+      <td class="hide">{{line|nbsp|safe}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="boxed-group dangerzone">
+  <h2>Danger Zone</h2>
+
+  <div class="boxed-group-inner">
+    <h3>Make changes taking effect</h3>
+    <a href="javascript:void(0)" class="button danger boxed-action" id="take-effect-btn">Take effect</a>
+
+    <p>
+      This may cause starting, stoping, restarting logstash processes.
+    </p>
+    <hr class="bleed-flush">
+    <h3>Delete this definition</h3>
+    <a href="javascript:void(0)" class="button danger boxed-action" id="delete-btn">Delete this definition</a>
+
+    <p>
+      Once deleted, all relative logstash processes would be killed. Please be certain.
+    </p>
+  </div>
+</div>

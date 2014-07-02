@@ -1,0 +1,23 @@
+input {
+  {{input-files|safe}}
+}
+
+filter {
+  grok {
+      match => { "message" => "%{BASE10NUM:connect} %{NUMBER:connect_requests:int} \[%{HTTPDATE:timestamp}\] %{NOTSPACE:parameters}" }
+      add_field => { "module" => "{{module}}" }
+  }
+
+  date {
+      locale => "en"
+      match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+  }
+}
+
+output {
+  elasticsearch { 
+    host => "{{es}}"
+    protocol => "http"
+    index => "nginx-%{module}-%{type}"
+  }
+}

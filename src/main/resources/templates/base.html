@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Welcome to Logkeeper</title>
+
+  <!-- scripts and styles -->
+  {% style "/css/bootstrap.min.css" %}
+  {% style "/css/bootstrap-responsive.min.css" %}
+  {% style "/css/bootstrap-combined.no-icons.min.css" %}
+  {% style "/css/font-awesome/css/font-awesome.min.css" %}
+  {% style "/css/jquery-ui.min.css" %}
+  {% style "/css/reveal.css" %}
+  {% style "/css/style.css" %}
+  {% style "/css/dashboard.css" %}
+  {% script "/js/jquery-1.9.1.min.js" %}
+  {% script "/js/jquery-ui.min.js" %}
+  {% script "/js/jquery.reveal.js" %}
+  {% script "/js/bootstrap.min.js" %}
+  {% script "/js/mindmup-editabletable.js" %}
+  {% script "/js/logkeeper.js" %}
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="./">Logkeeper</a>
+
+      <div class="nav-collapse">
+
+        <ul class="nav pull-right">
+          <li>
+            <a target="_blank" href="https://github.com/sanshi0518/logkeeper">
+              <i class="lead icon-github-sign"></i>
+              <span class="lead">View on GitHub</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="subnavbar">
+  <div class="subnavbar-inner">
+
+    <a class="btn btn-navbar btn-info visible-phone" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+
+    <div class="container nav-collapse">
+
+      <ul class="mainnav">
+        <li>
+          <a href="/"><i class="icon-home"></i><span>Home</span></a>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i id="logstash-widget-what" class="icon-sitemap"></i>
+            <span>Logstash <i class="icon-caret-down"></i></span>
+          </a>
+          <ul class="dropdown-menu" id="logstash-widget-opt">
+            <li>
+              <a href="logstash/definition/home"><i class="icon-hand-right"></i> Definition</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="es"><i class="icon-folder-open"></i><span>Elasticsearch</span></a>
+        </li>
+
+        <li>
+          <a href="kibana"><i class="icon-bar-chart"></i><span>Kibana</span></a>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i id="help-widget-what" class="icon-question-sign"></i>
+            <span>Help <i class="icon-caret-down"></i></span>
+          </a>
+          <ul class="dropdown-menu" id="help-widget-opt">
+            <li>
+              <a href="http://logstash.net/" target="_blank"><i class="icon-question-sign"></i> - About Logstash</a>
+            </li>
+            <li>
+              <a href="http://www.elasticsearch.org/" target="_blank"><i class="icon-question-sign"></i> - About
+                Elasticsearch</a>
+            </li>
+            <li>
+              <a href="http://www.elasticsearch.org/overview/kibana/" target="_blank"><i class="icon-question-sign"></i>
+                - About Kibana</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /subnavbar-inner -->
+</div>
+<!-- /subnavbar -->
+
+<div class="main">
+  <div class="main-inner">
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /main-inner -->
+</div>
+<!-- /main -->
+
+<div id="tips-modal" class="reveal-modal small">
+  <h4 id="tips-modal-content"></h4>
+  <a class="close-reveal-modal">&#215;</a>
+</div>
+
+<div id="processbar-modal" class="reveal-modal">
+  <div id="progressbar"></div>
+</div>
+
+<script type="text/javascript">
+
+  var show_tips = function (content) {
+    $("#tips-modal-content").html(content);
+    $("#tips-modal").reveal({
+      animation: 'fadeAndPop',
+      closeonbackgroundclick: true
+    });
+  }
+
+  var close_tips = function () {
+    $("#tips-modal").unreveal();
+  }
+
+  var show_processbar = function () {
+
+    $("#progressbar").progressbar({
+      value: false
+    });
+
+    var progressbar = $("#progressbar"),
+        progressbarValue = progressbar.find(".ui-progressbar-value");
+
+    progressbarValue.css({
+      "background": '#' + Math.floor(Math.random() * 16777215).toString(16)
+    });
+
+    $("#processbar-modal").reveal({
+      animation: 'fadeAndPop',
+      closeonbackgroundclick: false
+    });
+  }
+
+  var close_processbar = function () {
+    $("#processbar-modal").unreveal();
+  }
+</script>
+
+</body>
+</html>
+

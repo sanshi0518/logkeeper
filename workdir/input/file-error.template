@@ -1,0 +1,10 @@
+file {
+  path => "{{path}}"
+  type => "error"
+  start_position => end
+  codec => multiline {
+    pattern => "^%{NGINX_ERROR_TIMESTAMP} "
+    negate => true
+    what => previous
+  }
+}

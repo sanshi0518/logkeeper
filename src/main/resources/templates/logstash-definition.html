@@ -1,0 +1,114 @@
+{% extends "templates/base.html" %}
+{% block content %}
+<div class="span3">
+  <div class="hero-unit">
+    <div class="pull-right">
+      <a id="new-definition-btn" class="btn btn-inverse btn-small" href="javascript:void(0)">
+        <i class="icon-plus-sign"></i>
+      </a>
+    </div>
+    <h3>Definitions</h3>
+    <br>
+    <table class="table">
+      <tbody>
+      {% for definition in definition-list %}
+      <tr>
+        <td>
+          <a href="javascript:void(0)" class="detail-definition-btn">{{definition}}</a>
+        </td>
+      </tr>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="definition-detail" class="span9" class="hide">
+  {{definition-detail}}
+</div>
+
+<div id="definition-new" class="span9" style="display: none;">
+  <textarea id="new-definition-area" class="form-control" rows="20" placeholder="请输入日志信息"></textarea>
+  <div class="boxed-group warning">
+    <h2>Submit Zone</h2>
+
+    <div class="boxed-group-inner">
+      <dl>
+        <dt><h3>Definition name</h3></dt>
+        <dd>
+          <input id="definition-name-input" style="width: 250px;" type="text" placeholder="请输入日志信息名称(省略后缀名)">
+          <button id="submit-definition-btn" class="button" disabled> Submit</button>
+        </dd>
+      </dl>
+      <p>
+        Once submitted, logstash processes would be started immediately.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function () {
+
+    $("#new-definition-btn").bind("click", function () {
+      $("#definition-detail").hide();
+      $("#definition-new").show();
+    });
+
+    $(".detail-definition-btn").bind("click", function (evt) {
+      var target = $(evt.target);
+
+      $("#definition-new").hide();
+      $("#definition-detail").load("detail/" + target.html());
+      $("#definition-detail").show();
+    });
+
+    $("#definition-name-input").bind("keyup", function(evt) {
+      var submit_btn = $("#submit-definition-btn");
+
+      if ($(evt.target).val() != "") {
+        submit_btn.removeAttr("disabled");
+        submit_btn.addClass("warning");
+      } else {
+        submit_btn.removeClass("warning")
+        submit_btn.attr("disabled");
+      }
+    })
+
+    $("#submit-definition-btn").bind("click", function () {
+      var name = $("#definition-name-input").val();
+      if (name == "") {
+        show_tips("请先输入日志信息名称");
+        return;
+      }
+
+      var content = $("#new-definition-area").val();
+      if (content == "") {
+        show_tips("请先输入日志信息");
+        return;
+      }
+
+      show_processbar();
+
+      $.ajax({
+        type: 'POST',
+        url: "new/" + name,
+        data: {content : content},
+        error: function(xhr, status, error) {
+          close_processbar();
+          show_tips(xhr.responseText)
+        },
+        success: function(res) {
+          close_processbar();
+          show_tips("新增日志信息文件成功")
+          // TODO: refresh logstash page
+        }
+      });
+
+    })
+
+  });
+</script>
+
+{% endblock %}
